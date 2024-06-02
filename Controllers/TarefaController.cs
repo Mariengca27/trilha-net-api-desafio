@@ -24,7 +24,7 @@ namespace TrilhaApiDesafio.Controllers
             if (tarefa == null)
                 return NotFound();
             // caso contrário retornar OK com a tarefa encontrada
-            return Ok();
+            return Ok(tarefa);
         }
 
         [HttpGet("ObterTodos")]
@@ -85,8 +85,11 @@ namespace TrilhaApiDesafio.Controllers
                 return BadRequest(new { Erro = "A data da tarefa não pode ser vazia" });
 
             // TODO: Atualizar as informações da variável tarefaBanco com a tarefa recebida via parâmetro
+               _context.Entry(tarefaBanco).CurrentValues.SetValues(tarefa);
             // TODO: Atualizar a variável tarefaBanco no EF e salvar as mudanças (save changes)
-            return Ok();
+                 _context.SaveChanges();
+
+            return Ok(tarefa);
         }
 
         [HttpDelete("{id}")]
@@ -98,6 +101,8 @@ namespace TrilhaApiDesafio.Controllers
                 return NotFound();
 
             // TODO: Remover a tarefa encontrada através do EF e salvar as mudanças (save changes)
+            _context.Tarefas.Remove(tarefaBanco);
+            _context.SaveChanges();
             return NoContent();
         }
     }
